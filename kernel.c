@@ -27,7 +27,6 @@ void print_string(char *str, unsigned char color)
         index++;
         vga_index++;
     }
-
 }
 
 void kernel_main(void)

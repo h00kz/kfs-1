@@ -22,4 +22,3 @@ SECTIONS
         *(.bss)
     }
 }
-
