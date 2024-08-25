@@ -23,8 +23,13 @@ void terminal_putchar_at(uint8_t c, uint8_t color, size_t col, size_t row)
     terminal_buffer[index] = vga_entry(c, color);
 }
 
-void terminal_putchar(int8_t c)
+void terminal_putchar(char c)
 {
+    if (c == '\n')
+    {
+        terminal_newline();
+        return;
+    }
     terminal_putchar_at(c, terminal_color, terminal_column, terminal_row);
     if (++terminal_column == VGA_WIDTH)
     {
@@ -34,7 +39,12 @@ void terminal_putchar(int8_t c)
     }
 }
 
-void terminal_write_size(const int8_t* str, size_t size)
+void terminal_newline(void)
+{
+    return;
+}
+
+void terminal_write_size(const char* str, size_t size)
 {
     for (size_t i = 0; i < size; ++i)
         terminal_putchar(str[i]);
@@ -45,7 +55,7 @@ void terminal_set_colors(enum vga_color fg_color, enum vga_color bg_color)
     terminal_color = fg_color| bg_color << 4;
 }
 
-void terminal_putstr(const int8_t* str)
+void terminal_putstr(const char* str)
 {
     terminal_write_size(str, strlen(str));
 }

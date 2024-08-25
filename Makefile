@@ -16,7 +16,7 @@ bootloader: start.asm
 	nasm -f elf32 start.asm -o boot.o
 
 kernel: kernel.c
-	gcc -m32 -c kernel.c -o kernel.o -fno-builtin -fno-stack-protector -nostdlib -nodefaultlibs
+	gcc -m32 -c kernel.c -o kernel.o -nostdlib -fno-builtin -fno-stack-protector -nodefaultlibs
 
 linker: linker.ld boot.o kernel.o
 	ld -m elf_i386 -T linker.ld -o kernel.bin boot.o kernel.o

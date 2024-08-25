@@ -43,7 +43,7 @@ enum vga_color {
 	VGA_COLOR_WHITE = 15,
 };
 
-static inline size_t strlen(const int8_t* str)
+static inline size_t strlen(const char* str)
 {
     size_t len = 0;
     while (str[len])
@@ -63,10 +63,11 @@ static inline uint16_t vga_entry(uint8_t uc, uint8_t color)
 
 void terminal_init(void);
 void terminal_putchar_at(uint8_t c, uint8_t color, size_t col, size_t row);
-void terminal_putchar(int8_t c);
-void terminal_write_size(const int8_t *str, size_t size);
+void terminal_putchar(char c);
+void terminal_newline(void);
+void terminal_write_size(const char* str, size_t size);
 void terminal_set_colors(enum vga_color fg_color, enum vga_color bg_color);
-void terminal_putstr(const int8_t *str);
+void terminal_putstr(const char *str);
 void terminal_clear(void);
 
 #endif

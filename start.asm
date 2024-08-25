@@ -1,3 +1,4 @@
+section .note.GNU-stack
 BITS 32
 
 section .multiboot
