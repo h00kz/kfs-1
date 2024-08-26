@@ -7,6 +7,9 @@ CFG = grub.cfg
 ISO_PATH := iso
 BOOT_PATH := $(ISO_PATH)/boot
 GRUB_PATH := $(BOOT_PATH)/grub
+SRC_DIR = src
+SRC_FILES = $(shell find $(SRC_DIR) -name '*.c')
+OBJ_FILES = $(patsubst %.c,%.o,$(SRC_FILES))
 
 .PHONY: all clean
 all: iso
@@ -15,11 +18,14 @@ all: iso
 bootloader: start.asm
 	nasm -f elf32 start.asm -o boot.o
 
-kernel: kernel.c bootloader
+$(OBJ_FILES): $(SRC_FILES)
+	gcc -m32 -c $< -o $@ -fno-builtin -fno-stack-protector -nostdlib -nodefaultlibs
+
+kernel: kernel.c bootloader $(OBJ_FILES)
 	gcc -m32 -c kernel.c -o kernel.o -fno-builtin -fno-stack-protector -nostdlib -nodefaultlibs
 
 linker: linker.ld bootloader kernel
-	ld -m elf_i386 -T linker.ld -o $(BIN) boot.o kernel.o
+	ld -m elf_i386 -T linker.ld -o $(BIN) boot.o kernel.o $(OBJ_FILES)
 
 iso: linker
 	$(MKDIR) $(GRUB_PATH)
