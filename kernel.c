@@ -142,8 +142,15 @@ void kernel_main(void)
 {
     terminal_init();
 
-    // terminal_set_colors(VGA_COLOR_CYAN, VGA_COLOR_DARK_GREY);
-    terminal_putstr("42\nTEST\n");
+    terminal_set_colors(VGA_COLOR_RED, VGA_COLOR_BLACK);
+    terminal_putstr("        :::      ::::::::\n      :+:      :+:    :+:\n    +:+ +:+         +:+  \n  +#+  +:+       +#+     \n+#+#+#+#+#+   +#+        \n     #+#    #+#          \n    ###   ########       \n");
+    /*        :::      ::::::::*/
+    /*      :+:      :+:    :+:*/
+    /*    +:+ +:+         +:+  */
+    /*  +#+  +:+       +#+     */
+    /*+#+#+#+#+#+   +#+        */
+    /*     #+#    #+#          */
+    /*    ###   ########       */
     while (1)
     {
         keyboard_handler();
