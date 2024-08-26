@@ -4,8 +4,8 @@ BITS 32
 section .multiboot
     align 4
     dd 0x1badb002
-    dd 0x0
-    dd -(0x1badb002 + 0x0)
+    dd 0x3
+    dd -(0x1badb002 + 0x3)
 
 section .text
     global _start
