@@ -3,9 +3,9 @@
 
 void unit_test_vj(void)
 {
-  size_t i = ft_strlen("Hellofff fff"); 
+  size_t i = kstrlen("Hellofff fff"); 
   term_set_colors(VGA_COLOR_LIGHT_BLUE, VGA_COLOR_BLACK);
-  ft_putnbr(i);
+  kputnbr(i);
 }
 
 void kernel_main(void)

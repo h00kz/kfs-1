@@ -1,6 +1,6 @@
 #include "../../kernel/vga/vga.h"
 
-void	ft_putnbr(int n)
+void	kputnbr(int n)
 {
 	size_t	nbl;
 
@@ -14,7 +14,7 @@ void	ft_putnbr(int n)
 		term_putchar(nbl + '0');
 	else
 	{
-		ft_putnbr(nbl / 10);
+		kputnbr(nbl / 10);
 		term_putchar(nbl % 10 + '0');
 	}
 }
