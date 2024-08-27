@@ -42,7 +42,7 @@ enum vga_color {
     VGA_COLOR_LIGHT_CYAN = 11,
     VGA_COLOR_LIGHT_RED = 12,
     VGA_COLOR_LIGHT_MAGENTA = 13,
-    VGA_COLOR_LIGHT_BROWN = 14,
+    VGA_COLOR_LIGHT_BROWN = 14, 
     VGA_COLOR_WHITE = 15,
 };
 // -----------------------------
@@ -54,4 +54,5 @@ void term_newline(void);
 void term_print(const char *str);
 void term_clear_row(size_t row);
 void term_clear(void);
+void term_set_colors(enum vga_color fg_color, enum vga_color bg_color);
 // -----------------------------

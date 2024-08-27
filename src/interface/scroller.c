@@ -12,7 +12,7 @@ void scroll_up(void)
         {
             for(int col = 0; col < VGA_WIDTH; col++)
             {
-
+                
             }
         }
     }

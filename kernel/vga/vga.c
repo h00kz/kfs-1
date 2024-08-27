@@ -5,9 +5,9 @@ size_t term_column = 0;
 uint8_t term_color = 0;
 char_t* term_buffer = { 0 };
 
-static inline void term_set_colors(enum vga_color fg_color, enum vga_color bg_color)
+void term_set_colors(enum vga_color fg_color, enum vga_color bg_color)
 {
-    term_color = fg_color| bg_color << 4;
+    term_color = fg_color | bg_color << 4;
 }
 
 void term_init(void)
@@ -47,9 +47,18 @@ void term_newline(void)
     term_clear_row(VGA_WIDTH - 1);
 }
 
+void term_putchar(const char c)
+{
+    if (term_column == VGA_WIDTH)
+        term_newline();
+    
+    char_t _char = {.character = c, .color = term_color}; 
+    term_buffer[term_row * VGA_WIDTH + (term_column++)] = _char;
+}
+
 void term_print(const char* str)
 {
-    while (*str++)
+    while (*str)
     {
         switch (*str)
         {
@@ -66,19 +75,15 @@ void term_print(const char* str)
                 uint16_t tab_len = 4 - (term_column % 4);
                 while (tab_len != 0)
                 {
-                    term_buffer[term_row * VGA_WIDTH + (term_column++)] = \
-                        (char_t) {' ', term_color};
+                    term_putchar(' ');
                     tab_len--;
                 }
                 break;
             default:
-                if (term_column == VGA_WIDTH)
-                    term_newline();
-
-                char_t _char = {.character = *str, .color = term_color};
-                term_buffer[term_row * VGA_WIDTH + (term_column++)] = _char;
+                term_putchar(*str);
                 break;
         }
+        str++;
     }
 }
 

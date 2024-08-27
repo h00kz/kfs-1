@@ -16,8 +16,11 @@ GRUB_PATH 	=	$(BOOT_PATH)/grub
 
 SRCS		=	$(wildcard kernel/*.c)
 SRCS		+=	$(wildcard kernel/**/*.c)
+SRCS        +=  $(wildcard lib/**/*.c)
 BOOT		=	kernel/boot/start.asm
 BOOT_OBJ	=	kernel/boot/start.o
+#ASM			=	$(wildcard lib/**/*.asm)
+#ASM_OBJ		=	$(patsubst %.asm,%.o,$(ASM))
 LINKER		=	linker.ld
 OBJS		=	$(patsubst %.c,%.o,$(SRCS))
 
@@ -29,7 +32,10 @@ all: bootloader $(OBJS) linker iso
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
-bootloader: $(BOOT)
+#%.o: %.asm
+#	$(NASM) -f elf32 $< -o $@
+
+bootloader: $(BOOT)		
 	$(NASM) -f elf32 $(BOOT) -o $(BOOT_OBJ)
 
 # $(OBJ_FILES): $(SRC_FILES)
@@ -38,8 +44,8 @@ bootloader: $(BOOT)
 # kernel: kernel.c bootloader $(OBJ_FILES)
 # 	$(CC) $(CFLAGS) -c kernel.c -o kernel.o
 
-linker: $(LINKER) $(BOOT_OBJ) $(OBJS)
-	$(LD) -m elf_i386 -T $(LINKER) -o $(BIN) $(BOOT_OBJ) $(OBJS)
+linker: $(LINKER) $(BOOT_OBJ) $(OBJS) 
+	$(LD) -m elf_i386 -T $(LINKER) -o $(BIN) $(BOOT_OBJ) $(OBJS) 
 
 iso:
 	$(MKDIR) $(GRUB_PATH)
@@ -47,6 +53,9 @@ iso:
 	$(CP) $(CFG) $(GRUB_PATH)
 	grub-file --is-x86-multiboot $(BOOT_PATH)/$(BIN)
 	grub-mkrescue -o my-kernel.iso $(ISO_PATH)
+
+run:
+	qemu-system-i386 -cdrom my-kernel.iso		
 
 clean:
 	$(RM) kernel/boot/start.o $(OBJS) $(BIN) my-kernel.iso $(ISO_PATH)
