@@ -1,33 +1,47 @@
-CP := cp
-RM := rm -rf
-MKDIR := mkdir -pv
+CP 			=	cp
+RM 			=	rm -rf
+MKDIR 		=	mkdir -pv
 
-BIN = kernel.bin
-CFG = grub.cfg
-ISO_PATH := iso
-BOOT_PATH := $(ISO_PATH)/boot
-GRUB_PATH := $(BOOT_PATH)/grub
-SRC_DIR = src
-SRC_FILES = $(shell find $(SRC_DIR) -name '*.c')
-OBJ_FILES = $(patsubst %.c,%.o,$(SRC_FILES))
+NASM		=	nasm
+CC			=	gcc
+LD			=	ld
 
-.PHONY: all clean
-all: iso
+CFLAGS		=	-m32 -fno-builtin -fno-stack-protector -nostdlib -nodefaultlibs
+
+BIN 		=	kernel.bin
+CFG 		=	grub.cfg
+ISO_PATH 	=	iso
+BOOT_PATH 	=	$(ISO_PATH)/boot
+GRUB_PATH 	=	$(BOOT_PATH)/grub
+
+SRCS		=	$(wildcard kernel/*.c)
+SRCS		+=	$(wildcard kernel/**/*.c)
+BOOT		=	kernel/boot/start.asm
+BOOT_OBJ	=	kernel/boot/start.o
+LINKER		=	linker.ld
+OBJS		=	$(patsubst %.c,%.o,$(SRCS))
+
+.PHONY: all clean bootloader linker iso
+
+all: bootloader $(OBJS) linker iso
 	@echo Make has completed.
 
-bootloader: start.asm
-	nasm -f elf32 start.asm -o boot.o
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
 
-$(OBJ_FILES): $(SRC_FILES)
-	gcc -m32 -c $< -o $@ -fno-builtin -fno-stack-protector -nostdlib -nodefaultlibs
+bootloader: $(BOOT)
+	$(NASM) -f elf32 $(BOOT) -o $(BOOT_OBJ)
 
-kernel: kernel.c bootloader $(OBJ_FILES)
-	gcc -m32 -c kernel.c -o kernel.o -fno-builtin -fno-stack-protector -nostdlib -nodefaultlibs
+# $(OBJ_FILES): $(SRC_FILES)
+# 	$(CC) $(CFLAGS) -c $< -o $@
 
-linker: linker.ld bootloader kernel
-	ld -m elf_i386 -T linker.ld -o $(BIN) boot.o kernel.o $(OBJ_FILES)
+# kernel: kernel.c bootloader $(OBJ_FILES)
+# 	$(CC) $(CFLAGS) -c kernel.c -o kernel.o
 
-iso: linker
+linker: $(LINKER) $(BOOT_OBJ) $(OBJS)
+	$(LD) -m elf_i386 -T $(LINKER) -o $(BIN) $(BOOT_OBJ) $(OBJS)
+
+iso:
 	$(MKDIR) $(GRUB_PATH)
 	$(CP) $(BIN) $(BOOT_PATH)
 	$(CP) $(CFG) $(GRUB_PATH)
@@ -35,4 +49,4 @@ iso: linker
 	grub-mkrescue -o my-kernel.iso $(ISO_PATH)
 
 clean:
-	$(RM) *.o $(BIN) my-kernel.iso $(ISO_PATH)
+	$(RM) kernel/boot/start.o $(OBJS) $(BIN) my-kernel.iso $(ISO_PATH)
