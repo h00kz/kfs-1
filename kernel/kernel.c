@@ -1,5 +1,5 @@
 #include "vga/vga.h"
-//#include "../lib//libasm/libasm.h"
+#include "../lib/libkk/libc.h"
 
 void unit_test_vj(void)
 {
@@ -12,15 +12,9 @@ void kernel_main(void)
 {
     term_init();
 
-    term_print("        :::      ::::::::\n");
-    term_print("      :+:      :+:    :+:\n");
-    term_print("    +:+ +:+         +:+  \n");
-    term_print("  +#+  +:+       +#+     \n");
-    term_print("+#+#+#+#+#+   +#+        \n");
-    term_print("     #+#    #+#          \n");
-    term_print("    ###   ##########     \n");
+    term_banner();
 
-//tests
+    // tests
     unit_test_vj();
     
     while (1)

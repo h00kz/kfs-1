@@ -10,12 +10,27 @@ void term_set_colors(enum vga_color fg_color, enum vga_color bg_color)
     term_color = fg_color | bg_color << 4;
 }
 
+void term_banner(void)
+{
+    term_set_colors(VGA_COLOR_RED, VGA_COLOR_BLACK);
+    term_print("    :::     ::::::::       :::    ::: :::::::::: ::::::::  \n");
+    term_print("   :+:     :+:    :+:      :+:   :+:  :+:       :+:    :+: \n");
+    term_print("  +:+ +:+        +:+       +:+  +:+   +:+       +:+        \n");
+    term_print(" +#+  +:+      +#+         +#++:++    :#::+::#  +#++:++#++ \n");
+    term_print("+#+#+#+#+#+  +#+           +#+  +#+   +#+              +#+ \n");
+    term_print("      #+#   #+#            #+#   #+#  #+#       #+#    #+# \n");
+    term_print("      ###  ##########      ###    ### ###        ######## ");
+    term_set_colors(VGA_COLOR_DARK_GREY, VGA_COLOR_BLACK);
+    term_print("by vjavelot & jlarrieu\n\n");
+    term_set_colors(VGA_COLOR_LIGHT_GREY, VGA_COLOR_BLACK);
+}
+
 void term_init(void)
 {
     term_row = 0;
     term_column = 0;
     term_buffer = (char_t*) VGA_ADDRESS;
-    term_set_colors(VGA_COLOR_RED, VGA_COLOR_BLACK);
+    term_set_colors(VGA_COLOR_LIGHT_GREY, VGA_COLOR_BLACK);
     for (size_t row = 0; row < VGA_HEIGHT; ++row)
     {
         for (size_t column = 0; column < VGA_WIDTH; ++column)

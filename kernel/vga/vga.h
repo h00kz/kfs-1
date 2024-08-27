@@ -49,8 +49,10 @@ enum vga_color {
 
 
 // ------------- FUNC PROTOTYPES
+void term_banner(void);
 void term_init(void);
 void term_newline(void);
+void term_putchar(const char c);
 void term_print(const char *str);
 void term_clear_row(size_t row);
 void term_clear(void);
