@@ -34,8 +34,10 @@ void unit_test_vj(void)
     term_print("\n\nkprintf:\n");
 
     term_set_colors(VGA_COLOR_LIGHT_BLUE, VGA_COLOR_BLACK);
-    kprintf("int: %d, char: %c, str: %s", 10, 'a', "abc");
-
+    char *p = "test";
+    kprintf("char: %c, str: %s, *p: %p", 'a', "abc", p);
+    term_print("\n");
+    kprintf("int: %d, octal: %o, hexa: %x, HEXA: %X", 42, 42, 42, 42);
 }
 
 void kernel_main(void)
