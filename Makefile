@@ -19,33 +19,30 @@ SRCS		+=	$(wildcard kernel/**/*.c)
 SRCS        +=  $(wildcard lib/**/*.c)
 BOOT		=	kernel/boot/start.asm
 BOOT_OBJ	=	kernel/boot/start.o
-#ASM			=	$(wildcard lib/**/*.asm)
-#ASM_OBJ		=	$(patsubst %.asm,%.o,$(ASM))
+GDT			=	$(wildcard kernel/gdt/*.asm)
+GDT_OBJ		=	$(patsubst %.asm,%.o,$(GDT))
 LINKER		=	linker.ld
 OBJS		=	$(patsubst %.c,%.o,$(SRCS))
 
 .PHONY: all clean bootloader linker iso
 
-all: bootloader $(OBJS) linker iso
+all: bootloader gdt $(OBJS) linker iso
 	@echo Make has completed.
 
 %.o: %.c
 	$(CC) $(CFLAGS) -g -c $< -o $@ 
 
-#%.o: %.asm
-#	$(NASM) -f elf32 $< -o $@
+%.o: %.asm
+	$(NASM) -f elf32 $< -o $@
 
 bootloader: $(BOOT)		
 	$(NASM) -f elf32 $(BOOT) -o $(BOOT_OBJ)
 
-# $(OBJ_FILES): $(SRC_FILES)
-# 	$(CC) $(CFLAGS) -c $< -o $@
+gdt: $(GDT_OBJ)
+	$(NASM) -f elf32 $(GDT) -o $(GDT_OBJ)
 
-# kernel: kernel.c bootloader $(OBJ_FILES)
-# 	$(CC) $(CFLAGS) -c kernel.c -o kernel.o
-
-linker: $(LINKER) $(BOOT_OBJ) $(OBJS) 
-	$(LD) -m elf_i386 -T $(LINKER) -o $(BIN) $(BOOT_OBJ) $(OBJS) 
+linker: $(LINKER) $(BOOT_OBJ) $(OBJS) $(GDT_OBJ)
+	$(LD) -m elf_i386 -T $(LINKER) -o $(BIN) $(BOOT_OBJ) $(OBJS) $(GDT_OBJ)
 
 iso:
 	$(MKDIR) $(GRUB_PATH)
