@@ -1,4 +1,3 @@
-#include "../../kernel/vga/vga.h"
 #include "libk.h"
 
 static size_t	space(const char *str, size_t i)

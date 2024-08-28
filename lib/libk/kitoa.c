@@ -1,4 +1,3 @@
-#include "../../kernel/vga/vga.h"
 #include "libk.h"
 
 long int	isnegative(long int n)

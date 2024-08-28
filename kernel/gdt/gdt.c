@@ -3,12 +3,12 @@
 gdt_entry_t gdt_entries[5];
 gdt_ptr_t gdt_ptr;
 
-extern void flush_gdt(uint32_t* gdt_addr);
+extern void flush_gdt(uint8_t* gdt_addr);
 
 void gdt_init(void)
 {
     gdt_ptr.limit = (sizeof(gdt_entry_t) * 5) - 1;
-    gdt_ptr.base = &gdt_entries;
+    gdt_ptr.base = (uint32_t)&(gdt_entries);
 
     set_gdt_gate(0, 0, 0, 0, 0);
     set_gdt_gate(1, 0, 0xffffffff, 0x9a, 0xcf); // kernel code segment
@@ -16,7 +16,7 @@ void gdt_init(void)
     set_gdt_gate(3, 0, 0xffffffff, 0xfa, 0xcf); // user code segment
     set_gdt_gate(4, 0, 0xffffffff, 0xf2, 0xcf); // user data segment
 
-    flush_gdt((uint32_t*)&gdt_ptr);
+    flush_gdt((uint8_t*)&(gdt_ptr));
     // 1001 1010 kernel code seg
     //  9    A
     // 1001 0010 kernel data seg

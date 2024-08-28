@@ -1,4 +1,3 @@
-#include "../../kernel/vga/vga.h"
 #include "libk.h"
 
 void	*kmemset(char *s, int c, size_t n)

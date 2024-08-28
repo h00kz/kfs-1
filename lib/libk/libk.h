@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../kernel/vga/vga.h"
+#include "../types.h"
 
 size_t  kstrlen(const char *str);
 void    kputnbr(long int n);

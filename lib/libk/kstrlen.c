@@ -1,4 +1,4 @@
-#include "../../kernel/vga/vga.h"
+#include "libk.h"
 
 size_t kstrlen(const char *str)
 {

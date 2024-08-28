@@ -1,4 +1,4 @@
-#include "../../kernel/vga/vga.h"
+#include "libk.h"
 
 void	kputnbr(long int n)
 {

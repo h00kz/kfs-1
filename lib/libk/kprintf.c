@@ -1,4 +1,5 @@
 #include "../../kernel/vga/vga.h"
+#include "libk.h"
 #include <stdarg.h>
 
 void kprintf(const char *format, ...)
@@ -30,7 +31,7 @@ void kprintf(const char *format, ...)
             }
             else if (*p == 'c')
             {
-                char c = va_arg(args, char *);
+                char c = va_arg(args, int);
                 term_putchar(c);
             } 
             else 
