@@ -1,5 +1,6 @@
 #include "vga/vga.h"
-#include "../lib/libkk/libc.h"
+#include "gdt/gdt.h"
+#include "../lib/libk/libk.h"
 
 void unit_test_vj(void)
 {
@@ -10,6 +11,7 @@ void unit_test_vj(void)
 
 void kernel_main(void)
 {
+    gdt_init();
     term_init();
 
     term_banner();
