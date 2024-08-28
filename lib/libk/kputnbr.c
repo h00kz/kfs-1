@@ -1,8 +1,8 @@
 #include "../../kernel/vga/vga.h"
 
-void	kputnbr(int n)
+void	kputnbr(long int n)
 {
-	size_t	nbl;
+	long int	nbl;
 
 	nbl = n;
 	if (nbl < 0)

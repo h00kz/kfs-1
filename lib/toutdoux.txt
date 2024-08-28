@@ -1,1 +1,6 @@
-lib c
+kitoa (avec *str en arg)
+katoi
+kstrcmp
+kgetline
+kprintf
+

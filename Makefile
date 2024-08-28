@@ -30,7 +30,7 @@ all: bootloader $(OBJS) linker iso
 	@echo Make has completed.
 
 %.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -g -c $< -o $@ 
 
 #%.o: %.asm
 #	$(NASM) -f elf32 $< -o $@
