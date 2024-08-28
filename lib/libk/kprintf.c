@@ -12,11 +12,12 @@ static void itoa_octal(int value, char *str) {
     }
 
     p1 = p;
-    do {
+    while (value)
+    {
         tmp_value = value;
         value /= 8;
         *p++ = "01234567"[tmp_value - value * 8];
-    } while (value);
+    } ;
 
     *p = '\0';
 
@@ -41,11 +42,11 @@ static void itoa_hexa(int value, char *str) {
     }
 
     p1 = p;
-    do {
+    while (value) {
         tmp_value = value;
         value /= 16;
-        *p++ = "0123456789abcdef"[tmp_value - value * 8];
-    } while (value);
+        *p++ = "0123456789abcdef"[tmp_value - value * 16];
+    }
 
     *p = '\0';
 
@@ -70,11 +71,11 @@ static void itoa_HEXA(int value, char *str) {
     }
 
     p1 = p;
-    do {
+    while (value) {
         tmp_value = value;
         value /= 16;
-        *p++ = "0123456789ABCDEF"[tmp_value - value * 8];
-    } while (value);
+        *p++ = "0123456789ABCDEF"[tmp_value - value * 16];
+    }
 
     *p = '\0';
 
@@ -157,6 +158,7 @@ void kprintf(const char *format, ...)
                 char buffer[20];
                 itoa_HEXA(addr, buffer);
                 char *str = buffer;
+                term_print("0x");
                 while (*str) {
                     term_putchar(*str++);
                 }   

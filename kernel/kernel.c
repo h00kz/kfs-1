@@ -36,7 +36,7 @@ void unit_test_vj(void)
     char *p = "test";
     kprintf("char: %c, str: %s, *p: %p", 'a', "abc", p);
     term_print("\n");
-    kprintf("int: %d, octal: %o, hexa: %x, HEXA: %X", 10, 10, 10, 10);
+    kprintf("int: %d, octal: %o, hexa: %x, HEXA: %X", 42, 42, 42, 42);
 }
 
 void kernel_main(void)
