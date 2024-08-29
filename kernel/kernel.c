@@ -55,13 +55,10 @@ void kernel_main(void)
     term_init();
 
     term_banner();
-<<<<<<< HEAD
     term_footer();
-=======
     kb_init();
     enable_int();
     prompt(0);
->>>>>>> main
     // tests
     // unit_test_vj();
 

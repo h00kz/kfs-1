@@ -108,27 +108,6 @@ void kprintf(const char *format, ...)
                 char *str = buffer;
                 term_print(str);  
             }
-<<<<<<< HEAD
-=======
-            else if (*p == 'X')
-            {
-                int i = va_arg(args, int);
-                char buffer[20];
-                itoa_HEXA(i, buffer);
-                char *str = buffer;
-                term_print(str); 
-            }
-            else if (*p == 'p')
-            {
-                void *p = va_arg(args, void *);
-                unsigned long addr = (unsigned long)p;
-                char buffer[20];
-                itoa_HEXA(addr, buffer);
-                char *str = buffer;
-                term_print("0x");
-                term_print(str);
-            } 
->>>>>>> main
             else 
             {
                 term_putchar('%');
