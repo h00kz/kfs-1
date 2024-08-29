@@ -38,6 +38,11 @@ enum vga_color {
 
 
 // ------------- FUNC PROTOTYPES
+void prompt(char c);
+size_t get_term_col(void);
+size_t get_term_row(void);
+void set_term_col(size_t v);
+void set_term_row(size_t v);
 void term_banner(void);
 void term_init(void);
 void term_newline(void);

@@ -1,6 +1,9 @@
 #include "vga/vga.h"
 #include "gdt/gdt.h"
+#include "idt/idt.h"
 #include "../lib/libk/libk.h"
+#include "keyboard/keyboard.h"
+// #include "prompt/prompt.h"
 
 void unit_test_vj(void)
 {
@@ -40,17 +43,25 @@ void unit_test_vj(void)
     kprintf("int: %d, octal: %o, hexa: %x, HEXA: %X", 42, 42, 42, 42);
 }
 
+void kb_init(void)
+{
+	ioport_out(PIC1_DATA, 0xfd);
+}
+
 void kernel_main(void)
 {
     gdt_init();
+    idt_init();
     term_init();
 
     term_banner();
-
+    kb_init();
+    enable_int();
+    prompt(0);
     // tests
-    unit_test_vj();
-    
-    while (1)
-    {}
+    // unit_test_vj();
+
+    while (42)
+        ;
     return;
 }

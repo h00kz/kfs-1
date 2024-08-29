@@ -19,14 +19,14 @@ SRCS		+=	$(wildcard kernel/**/*.c)
 SRCS        +=  $(wildcard lib/**/*.c)
 BOOT		=	kernel/boot/start.asm
 BOOT_OBJ	=	kernel/boot/start.o
-GDT			=	$(wildcard kernel/gdt/*.asm)
-GDT_OBJ		=	$(patsubst %.asm,%.o,$(GDT))
+GDT			=	$(wildcard kernel/*dt/*.asm)
 LINKER		=	linker.ld
-OBJS		=	$(patsubst %.c,%.o,$(SRCS))
+OBJS		=	$(patsubst %.asm,%.o,$(GDT))
+OBJS		+=	$(patsubst %.c,%.o,$(SRCS))
 
 .PHONY: all clean bootloader linker iso
 
-all: bootloader gdt $(OBJS) linker iso
+all: bootloader $(OBJS) linker iso
 	@echo Make has completed.
 
 %.o: %.c
@@ -38,11 +38,8 @@ all: bootloader gdt $(OBJS) linker iso
 bootloader: $(BOOT)		
 	$(NASM) -f elf32 $(BOOT) -o $(BOOT_OBJ)
 
-gdt: $(GDT_OBJ)
-	$(NASM) -f elf32 $(GDT) -o $(GDT_OBJ)
-
-linker: $(LINKER) $(BOOT_OBJ) $(OBJS) $(GDT_OBJ)
-	$(LD) -m elf_i386 -T $(LINKER) -o $(BIN) $(BOOT_OBJ) $(OBJS) $(GDT_OBJ)
+linker: $(LINKER) $(BOOT_OBJ) $(OBJS)
+	$(LD) -m elf_i386 -T $(LINKER) -o $(BIN) $(BOOT_OBJ) $(OBJS)
 
 iso:
 	$(MKDIR) $(GRUB_PATH)
@@ -52,7 +49,9 @@ iso:
 	grub-mkrescue -o my-kernel.iso $(ISO_PATH)
 
 run:
-	qemu-system-i386 -cdrom my-kernel.iso		
+	qemu-system-i386 -cdrom my-kernel.iso
+
+re: clean all run
 
 clean:
 	$(RM) kernel/boot/start.o $(OBJS) $(BIN) my-kernel.iso $(ISO_PATH)

@@ -103,9 +103,7 @@ void kprintf(const char *format, ...)
             if (*p == 's') 
             {
                 char *str = va_arg(args, char *);
-                while (*str) {
-                    term_putchar(*str++);
-                }
+                term_print(str);
             } 
             else if (*p == 'd') 
             {
@@ -113,9 +111,7 @@ void kprintf(const char *format, ...)
                 char buffer[20];
                 kitoa(i, buffer);
                 char *str = buffer;
-                while (*str) {
-                    term_putchar(*str++);
-                }
+                term_print(str);
             }
             else if (*p == 'c')
             {
@@ -128,9 +124,7 @@ void kprintf(const char *format, ...)
                 char buffer[20];
                 itoa_octal(i, buffer);
                 char *str = buffer;
-                while (*str) {
-                    term_putchar(*str++);
-                }
+                term_print(str);
             }
             else if (*p == 'x')
             {
@@ -138,9 +132,7 @@ void kprintf(const char *format, ...)
                 char buffer[20];
                 itoa_hexa(i, buffer);
                 char *str = buffer;
-                while (*str) {
-                    term_putchar(*str++);
-                }   
+                term_print(str);  
             }
             else if (*p == 'X')
             {
@@ -148,9 +140,7 @@ void kprintf(const char *format, ...)
                 char buffer[20];
                 itoa_HEXA(i, buffer);
                 char *str = buffer;
-                while (*str) {
-                    term_putchar(*str++);
-                }   
+                term_print(str); 
             }
             else if (*p == 'p')
             {
@@ -160,9 +150,7 @@ void kprintf(const char *format, ...)
                 itoa_HEXA(addr, buffer);
                 char *str = buffer;
                 term_print("0x");
-                while (*str) {
-                    term_putchar(*str++);
-                }   
+                term_print(str);
             } 
             else 
             {
