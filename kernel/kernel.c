@@ -7,40 +7,45 @@
 
 void unit_test_vj(void)
 {
-    /*katoi testin*/
-    term_print("katoi:\n");
-    size_t i = katoi("-123"); 
-    term_set_colors(VGA_COLOR_LIGHT_BLUE, VGA_COLOR_BLACK);   
-    kputnbr(i);
+    // /*katoi testing*/
+    // term_print("katoi:\n");
+    // size_t i = katoi("-123"); 
+    // term_set_colors(VGA_COLOR_LIGHT_BLUE, VGA_COLOR_BLACK);   
+    // kputnbr(i);
 
-    /*kitoa testin*/
-    term_set_colors(VGA_COLOR_LIGHT_GREY, VGA_COLOR_BLACK); 
-    term_print("\n\nkitoa:\n");
+    // /*kitoa testing*/
+    // term_set_colors(VGA_COLOR_LIGHT_GREY, VGA_COLOR_BLACK); 
+    // term_print("\n\nkitoa:\n");
 
-    char *s = kitoa(-12, s);
+    // char *s = kitoa(-12, s);
 
-    term_set_colors(VGA_COLOR_LIGHT_BLUE, VGA_COLOR_BLACK);
-    term_print(s);
+    // term_set_colors(VGA_COLOR_LIGHT_BLUE, VGA_COLOR_BLACK);
+    // term_print(s);
 
-    /*kstrncmp testin*/
-    term_set_colors(VGA_COLOR_LIGHT_GREY, VGA_COLOR_BLACK); 
-    term_print("\n\nkstrncmp:\n");
+    // /*kstrncmp testing*/
+    // term_set_colors(VGA_COLOR_LIGHT_GREY, VGA_COLOR_BLACK); 
+    // term_print("\n\nkstrncmp:\n");
 
-    char *s1 = "hahaha";
-    char *s2 = "hahai"; 
-    i = kstrncmp(s1, s2, 6);
-    term_set_colors(VGA_COLOR_LIGHT_BLUE, VGA_COLOR_BLACK);
-    kputnbr(i);
+    // char *s1 = "hahaha";
+    // char *s2 = "hahai"; 
+    // i = kstrncmp(s1, s2, 6);
+    // term_set_colors(VGA_COLOR_LIGHT_BLUE, VGA_COLOR_BLACK);
+    // kputnbr(i);
 
-    /*kprintf testin*/
-    term_set_colors(VGA_COLOR_LIGHT_GREY, VGA_COLOR_BLACK); 
-    term_print("\n\nkprintf:\n");
+    // /*kprintf testing*/
+    // term_set_colors(VGA_COLOR_LIGHT_GREY, VGA_COLOR_BLACK); 
+    // term_print("\n\nkprintf:\n");
 
-    term_set_colors(VGA_COLOR_LIGHT_BLUE, VGA_COLOR_BLACK);
-    char *p = "test";
-    kprintf("char: %c, str: %s, *p: %p", 'a', "abc", p);
-    term_print("\n");
-    kprintf("int: %d, octal: %o, hexa: %x, HEXA: %X", 42, 42, 42, 42);
+    // term_set_colors(VGA_COLOR_LIGHT_BLUE, VGA_COLOR_BLACK);
+    // char *p = "test";
+    // kprintf("char: %c, str: %s, *p: %p", 'a', "abc", p);
+    // term_print("\n");
+    // kprintf("int: %d, octal: %o, hexa: %x, HEXA: %X", 42, 42, 42, 42);
+
+    /*kprintf testing*/
+    char *p = "bjr Jor\0ssssssss";
+    print_hex_dump(p, 30);
+
 }
 
 void kb_init(void)
@@ -59,8 +64,9 @@ void kernel_main(void)
     kb_init();
     enable_int();
     prompt(0);
-    // tests
-    // unit_test_vj();
+
+    /* TESTING */
+    unit_test_vj();
 
     while (42)
         ;
