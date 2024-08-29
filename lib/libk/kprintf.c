@@ -2,6 +2,17 @@
 #include "libk.h"
 #include <stdarg.h>
 
+static void itoa_reverse(char *p1, char *p2)
+{
+    while (p1 < p2) {
+        char tmp = *p1;
+        *p1 = *p2;
+        *p2 = tmp;
+        p1++;
+        p2--;
+    }
+}
+
 static void itoa_octal(int value, char *str) {
     char *p = str;
     char *p1, *p2;
@@ -11,7 +22,6 @@ static void itoa_octal(int value, char *str) {
         *p++ = '-';
         value = -value;
     }
-
     p1 = p;
     while (value)
     {
@@ -19,20 +29,12 @@ static void itoa_octal(int value, char *str) {
         value /= 8;
         *p++ = "01234567"[tmp_value - value * 8];
     } ;
-
     *p = '\0';
-
     p2 = p - 1;
-    while (p1 < p2) {
-        char tmp = *p1;
-        *p1 = *p2;
-        *p2 = tmp;
-        p1++;
-        p2--;
-    }
+    itoa_reverse(p1, p2);
 }
 
-static void itoa_hexa(int value, char *str) {
+static void itoa_hexa(int value, char *str, char flag) {
     char *p = str;
     char *p1, *p2;
     int tmp_value;
@@ -41,53 +43,20 @@ static void itoa_hexa(int value, char *str) {
         *p++ = '-';
         value = -value;
     }
-
     p1 = p;
+    if (flag == 'p')
+        term_print("0x");
     while (value) {
         tmp_value = value;
         value /= 16;
-        *p++ = "0123456789abcdef"[tmp_value - value * 16];
+        if (flag == 'x')
+            *p++ = "0123456789abcdef"[tmp_value - value * 16];
+        else
+            *p++ = "0123456789ABCDEF"[tmp_value - value * 16];
     }
-
     *p = '\0';
-
     p2 = p - 1;
-    while (p1 < p2) {
-        char tmp = *p1;
-        *p1 = *p2;
-        *p2 = tmp;
-        p1++;
-        p2--;
-    }
-}
-
-static void itoa_HEXA(int value, char *str) {
-    char *p = str;
-    char *p1, *p2;
-    int tmp_value;
-
-    if (value < 0) {
-        *p++ = '-';
-        value = -value;
-    }
-
-    p1 = p;
-    while (value) {
-        tmp_value = value;
-        value /= 16;
-        *p++ = "0123456789ABCDEF"[tmp_value - value * 16];
-    }
-
-    *p = '\0';
-
-    p2 = p - 1;
-    while (p1 < p2) {
-        char tmp = *p1;
-        *p1 = *p2;
-        *p2 = tmp;
-        p1++;
-        p2--;
-    }
+    itoa_reverse(p1, p2);
 }
 
 void kprintf(const char *format, ...)
@@ -107,6 +76,11 @@ void kprintf(const char *format, ...)
                     term_putchar(*str++);
                 }
             } 
+            else if (*p == 'c')
+            {   
+                char c = va_arg(args, int);
+                term_putchar(c);
+            }
             else if (*p == 'd') 
             {
                 int i = va_arg(args, int);
@@ -116,11 +90,6 @@ void kprintf(const char *format, ...)
                 while (*str) {
                     term_putchar(*str++);
                 }
-            }
-            else if (*p == 'c')
-            {
-                char c = va_arg(args, int);
-                term_putchar(c);
             }
             else if (*p == 'o')
             {
@@ -132,38 +101,21 @@ void kprintf(const char *format, ...)
                     term_putchar(*str++);
                 }
             }
-            else if (*p == 'x')
+            else if (*p == 'x' || *p == 'X' || *p == 'p')
             {
                 int i = va_arg(args, int);
                 char buffer[20];
-                itoa_hexa(i, buffer);
+                if (*p == 'x')
+                    itoa_hexa(i, buffer, 'x');
+                else if (*p == 'X')
+                    itoa_hexa(i, buffer, 'X');
+                else 
+                    itoa_hexa(i, buffer, 'p');
                 char *str = buffer;
                 while (*str) {
                     term_putchar(*str++);
                 }   
             }
-            else if (*p == 'X')
-            {
-                int i = va_arg(args, int);
-                char buffer[20];
-                itoa_HEXA(i, buffer);
-                char *str = buffer;
-                while (*str) {
-                    term_putchar(*str++);
-                }   
-            }
-            else if (*p == 'p')
-            {
-                void *p = va_arg(args, void *);
-                unsigned long addr = (unsigned long)p;
-                char buffer[20];
-                itoa_HEXA(addr, buffer);
-                char *str = buffer;
-                term_print("0x");
-                while (*str) {
-                    term_putchar(*str++);
-                }   
-            } 
             else 
             {
                 term_putchar('%');
@@ -175,6 +127,5 @@ void kprintf(const char *format, ...)
             term_putchar(*p);
         }
     }
-
     va_end(args);
 }

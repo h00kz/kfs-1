@@ -11,6 +11,11 @@ typedef struct char_s
     uint8_t color;
 } char_t;
 
+typedef struct prompt_s
+{
+    size_t id;
+    char_t prompt;
+} prompt_t;
 
 static const long VGA_WIDTH = 80;
 static const long VGA_HEIGHT = 25;

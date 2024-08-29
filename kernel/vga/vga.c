@@ -21,8 +21,25 @@ void term_banner(void)
     term_print("      #+#   #+#            #+#   #+#  #+#       #+#    #+# \n");
     term_print("      ###  ##########      ###    ### ###        ######## ");
     term_set_colors(VGA_COLOR_DARK_GREY, VGA_COLOR_BLACK);
+    term_print("\n");
     term_print("by vjavelot & jlarrieu\n\n");
     term_set_colors(VGA_COLOR_LIGHT_GREY, VGA_COLOR_BLACK);
+}
+
+void term_footer(void)
+{
+    term_set_colors(VGA_COLOR_LIGHT_GREY, VGA_COLOR_BLACK);
+    // for (size_t i = 0; i < 10; i++)
+    //     term_putchar(' ');
+    term_print("     ");
+    term_print("TAB: navigate");
+    term_print("    ");
+    term_print("ENTER: access");
+    term_print("     ");
+    term_print("F3: return");
+    term_print("     ");
+    term_print("ESCAPE: exit");
+    term_print("\n\n\n");
 }
 
 void term_init(void)

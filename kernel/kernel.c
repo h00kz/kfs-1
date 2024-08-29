@@ -46,7 +46,7 @@ void kernel_main(void)
     term_init();
 
     term_banner();
-
+    term_footer();
     // tests
     unit_test_vj();
     
