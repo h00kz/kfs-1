@@ -43,7 +43,7 @@ void unit_test_vj(void)
     // kprintf("int: %d, octal: %o, hexa: %x, HEXA: %X", 42, 42, 42, 42);
 
     /*kprintf testing*/
-    char *p = "bjr Jor\0ssssssss";
+    char *p = "bjr JoriiiiqSQSDssssssss";
     print_hex_dump(p, 30);
 
 }

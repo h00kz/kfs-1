@@ -13,8 +13,7 @@ void print_hex_dump(uint32_t addr, size_t limit)
     {
         if (j >= (VGA_WIDTH - 11) / 2)
         {
-            kprintf("| ");
-            kprintf("\n%p | ", array);
+            kprintf("|\n%p | ", array);
             j = 0;
         }
         else
@@ -33,8 +32,7 @@ void print_hex_dump(uint32_t addr, size_t limit)
     {
         if (j >= (VGA_WIDTH - 11) / 2)
         {
-            kprintf("| ");
-            kprintf("\n%p | ", array);
+            kprintf("|\n%p | ", array);
             j = 0;
         }
         else
