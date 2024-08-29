@@ -12,6 +12,8 @@ void term_set_colors(enum vga_color fg_color, enum vga_color bg_color)
 
 void term_banner(void)
 {
+    term_column = 0;
+    term_row = 0;
     term_set_colors(VGA_COLOR_RED, VGA_COLOR_BLACK);
     term_print("    :::     ::::::::       :::    ::: :::::::::: ::::::::  \n");
     term_print("   :+:     :+:    :+:      :+:   :+:  :+:       :+:    :+: \n");
@@ -58,29 +60,43 @@ void term_init(void)
     }
 }
 
-void term_newline(void)
+void scroll_up(void)
 {
-    term_column = 0;
-
-    if (term_row < VGA_HEIGHT - 1)
+    for (size_t row = 0; row < VGA_HEIGHT; row++)
     {
-        term_row++;
-        return;
-    }
-
-    for (size_t row = 1; row < VGA_HEIGHT; ++row)
-    {
-        for (size_t col = 0; row < VGA_WIDTH; ++col)
+        for (size_t col = 0; col < VGA_WIDTH; col++)
         {
             char_t _char = term_buffer[row * VGA_WIDTH + col];
             term_buffer[(row - 1) * VGA_WIDTH + col] = _char;
         }
     }
-    term_clear_row(VGA_WIDTH - 1);
+    term_clear_row(term_row);
+}
+
+void term_newline(void)
+{
+
+    if (term_row < VGA_HEIGHT - 1)
+    {
+        term_row++;
+        term_column = 0;
+    }
+    else
+    {
+        scroll_up();
+        // term_banner();
+        term_column = 0;
+    }
+    return;
 }
 
 void term_putchar(const char c)
 {
+    if (c == '\n')
+    {
+        term_newline();
+        return;
+    }
     if (term_column == VGA_WIDTH)
         term_newline();
     
@@ -99,6 +115,13 @@ void term_print(const char* str)
                 break;
             case '\r':
                 term_column = 0;
+                break;
+            case '\b':
+                if (term_column == 0)
+                    return;
+                term_column--;
+                term_putchar(' ');
+                term_column--;
                 break;
             case '\t':
                 if (term_column == VGA_WIDTH)
@@ -132,6 +155,51 @@ void term_clear_row(size_t row)
         };
         term_buffer[index] = _char;
     }
+}
+
+size_t get_term_col(void)
+{
+    return term_column;
+}
+
+size_t get_term_row(void)
+{
+    return term_row;
+}
+
+void set_term_col(size_t v)
+{
+    term_column = v;
+}
+
+void set_term_row(size_t v)
+{
+    term_row = v;
+}
+
+void prompt(char c)
+{
+    if (c == '\n')
+        term_putchar('\n');
+    else if (c == '\b')
+    {
+        if (term_column == 0)
+            return;
+        term_column--;
+        term_putchar(' ');
+        term_column--;
+    }
+
+    if (c == '\n' || c == 0)
+    {
+        if (c == 0)
+            term_putchar('\n');
+        term_set_colors(VGA_COLOR_LIGHT_GREEN, VGA_COLOR_BLACK);
+        term_print("[@kfs-1]> ");
+        term_set_colors(VGA_COLOR_LIGHT_GREY, VGA_COLOR_BLACK);
+    }
+    if (c != '\n')
+        term_putchar(c);
 }
 
 void term_clear(void)

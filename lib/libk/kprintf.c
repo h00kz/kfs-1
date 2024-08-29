@@ -72,9 +72,7 @@ void kprintf(const char *format, ...)
             if (*p == 's') 
             {
                 char *str = va_arg(args, char *);
-                while (*str) {
-                    term_putchar(*str++);
-                }
+                term_print(str);
             } 
             else if (*p == 'c')
             {   
@@ -87,9 +85,7 @@ void kprintf(const char *format, ...)
                 char buffer[20];
                 kitoa(i, buffer);
                 char *str = buffer;
-                while (*str) {
-                    term_putchar(*str++);
-                }
+                term_print(str);
             }
             else if (*p == 'o')
             {
@@ -97,9 +93,7 @@ void kprintf(const char *format, ...)
                 char buffer[20];
                 itoa_octal(i, buffer);
                 char *str = buffer;
-                while (*str) {
-                    term_putchar(*str++);
-                }
+                term_print(str);
             }
             else if (*p == 'x' || *p == 'X' || *p == 'p')
             {
@@ -112,10 +106,29 @@ void kprintf(const char *format, ...)
                 else 
                     itoa_hexa(i, buffer, 'p');
                 char *str = buffer;
-                while (*str) {
-                    term_putchar(*str++);
-                }   
+                term_print(str);  
             }
+<<<<<<< HEAD
+=======
+            else if (*p == 'X')
+            {
+                int i = va_arg(args, int);
+                char buffer[20];
+                itoa_HEXA(i, buffer);
+                char *str = buffer;
+                term_print(str); 
+            }
+            else if (*p == 'p')
+            {
+                void *p = va_arg(args, void *);
+                unsigned long addr = (unsigned long)p;
+                char buffer[20];
+                itoa_HEXA(addr, buffer);
+                char *str = buffer;
+                term_print("0x");
+                term_print(str);
+            } 
+>>>>>>> main
             else 
             {
                 term_putchar('%');
