@@ -1,9 +1,21 @@
 #include "vga.h"
+#include "../../lib/libk/libk.h"
+#include "../idt/idt.h"
 
 size_t term_row = 0;
 size_t term_column = 0;
 uint8_t term_color = 0;
 char_t* term_buffer = { 0 };
+
+void update_cursor(int x, int y)
+{
+	uint16_t pos = y * VGA_WIDTH + x;
+
+	ioport_out(0x3D4, 0x0F);
+	ioport_out(0x3D5, (uint8_t) (pos & 0xFF));
+	ioport_out(0x3D4, 0x0E);
+	ioport_out(0x3D5, (uint8_t) ((pos >> 8) & 0xFF));
+}
 
 void term_set_colors(enum vga_color fg_color, enum vga_color bg_color)
 {
@@ -102,13 +114,15 @@ void term_putchar(const char c)
     
     char_t _char = {.character = c, .color = term_color}; 
     term_buffer[term_row * VGA_WIDTH + (term_column++)] = _char;
+    update_cursor(term_column, term_row);
 }
 
 void term_print(const char* str)
 {
-    while (*str)
+    int i = 0;
+    while (str[i])
     {
-        switch (*str)
+        switch (str[i])
         {
             case '\n':
                 term_newline();
@@ -135,10 +149,10 @@ void term_print(const char* str)
                 }
                 break;
             default:
-                term_putchar(*str);
+                term_putchar(str[i]);
                 break;
         }
-        str++;
+        i++;
     }
 }
 
@@ -177,19 +191,47 @@ void set_term_row(size_t v)
     term_row = v;
 }
 
+static char_t get_char(size_t index)
+{
+    return term_buffer[index];
+}
+
 void prompt(char c)
 {
     if (c == '\n')
         term_putchar('\n');
     else if (c == '\b')
     {
-        if (term_column == 0)
+        if (term_column == 0 || term_column <= kstrlen("[@kfs-1]> "))
             return;
         term_column--;
         term_putchar(' ');
         term_column--;
+        update_cursor(term_column, term_row);
     }
-
+    else if (c == '\t')
+    {
+        term_print("\t");
+        return;
+    }
+    if (c == -13)
+    {
+        if (term_column == 0 || term_column <= kstrlen("[@kfs-1]> "))
+            return;
+        update_cursor(--term_column, term_row);
+        return;
+    }
+    else if (c == -14)
+    {
+        size_t index = term_row * VGA_WIDTH + term_column;
+        char_t _char = {.character = ' ', .color = term_color};
+        if (' ' == get_char(index).character)
+            return;
+        // int len = kstrlen(term_buffer);
+        // kprintf("len: %d", len);
+        update_cursor(++term_column, term_row);
+        return;
+    }
     if (c == '\n' || c == 0)
     {
         if (c == 0)
@@ -197,8 +239,9 @@ void prompt(char c)
         term_set_colors(VGA_COLOR_LIGHT_GREEN, VGA_COLOR_BLACK);
         term_print("[@kfs-1]> ");
         term_set_colors(VGA_COLOR_LIGHT_GREY, VGA_COLOR_BLACK);
+        // update_cursor(term_column, term_row);
     }
-    if (c != '\n')
+    else if (c != '\n' && c != '\b')
         term_putchar(c);
 }
 

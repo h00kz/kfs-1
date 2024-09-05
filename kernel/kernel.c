@@ -66,7 +66,7 @@ void kernel_main(void)
     prompt(0);
 
     /* TESTING */
-    unit_test_vj();
+    // unit_test_vj();
 
     while (42)
         ;

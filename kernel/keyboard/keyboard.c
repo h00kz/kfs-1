@@ -13,7 +13,7 @@ void handle_keyboard_interrupt()
 		char keycode = ioport_in(KEYBOARD_DATA_PORT);
 		if (keycode < 0 || keycode >= 128)
 			return;
-        // kprintf("keycode: %d \n", keycode);
+        // kprintf("keycode: %d %c\n", keycode, keyboard_map[keycode]);
         prompt(keyboard_map[keycode]);
     }
 }
