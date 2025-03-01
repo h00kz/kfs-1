@@ -43,8 +43,8 @@ void unit_test_vj(void)
     // kprintf("int: %d, octal: %o, hexa: %x, HEXA: %X", 42, 42, 42, 42);
 
     /*kprintf testing*/
-    char *p = "bjr JoriiiiqSQSDssssssss";
-    print_hex_dump(p, 30);
+    // char *p = "bjr JoriiiiqSQSDssssssss";
+    // print_hex_dump(p, 30);
 
 }
 
@@ -60,7 +60,7 @@ void kernel_main(void)
     term_init();
 
     term_banner();
-    term_footer();
+    // term_footer();
     kb_init();
     enable_int();
     prompt(0);
