@@ -56,18 +56,22 @@ void term_footer(void)
     term_print("\n\n\n");
 }
 
-void term_init(void)
+void term_init(char_t * vga_address)
 {
     term_row = 0;
     term_column = 0;
-    term_buffer = (char_t*) VGA_ADDRESS;
+//    term_buffer = (char_t*) VGA_ADDRESS;
+    term_buffer = vga_address;
     term_set_colors(VGA_COLOR_LIGHT_GREY, VGA_COLOR_BLACK);
-    for (size_t row = 0; row < VGA_HEIGHT; ++row)
+    for (size_t i = 0; i < 5; ++i)
     {
-        for (size_t column = 0; column < VGA_WIDTH; ++column)
+        for (size_t row = 0; row < VGA_HEIGHT; ++row)
         {
-            char_t _char = {.character = ' ', .color = term_color};
-            term_buffer[row * VGA_WIDTH + column] = _char;
+            for (size_t column = 0; column < VGA_WIDTH; ++column)
+            {
+                char_t _char = {.character = ' ', .color = term_color};
+                term_buffer[row * VGA_WIDTH + column] = _char;
+            }
         }
     }
 }

@@ -53,17 +53,31 @@ void kb_init(void)
 	ioport_out(PIC1_DATA, 0xfd);
 }
 
-void kernel_main(void)
+void term_launcher(char vga_address)
 {
-    gdt_init();
-    idt_init();
-    term_init();
-
+    term_init(vga_address);
     term_banner();
     // term_footer();
     kb_init();
     enable_int();
     prompt(0);
+}
+
+void kernel_main(void)
+{
+    char vga_address = VGA_ADDRESS_1;
+  
+    gdt_init();
+    idt_init();
+    term_launcher(vga_address);
+//    term_init(vga_address);
+//    term_init((char_t *) VGA_ADDRESS_2);
+
+    // term_banner();
+    // // term_footer();
+    // kb_init();
+    // enable_int();
+    // prompt(0);
 
     /* TESTING */
     // unit_test_vj();

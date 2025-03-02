@@ -3,7 +3,8 @@
 #include "../../lib/types.h"
 
 
-#define VGA_ADDRESS 0xB8000 // VGA text buffer address
+#define VGA_ADDRESS_1 0xB8000 // VGA text buffer address
+#define VGA_ADDRESS_2 0xD8000 // VGA text buffer address
 
 typedef struct char_s
 {
@@ -50,7 +51,7 @@ void set_term_col(size_t v);
 void set_term_row(size_t v);
 void term_banner(void);
 void term_footer(void);
-void term_init(void);
+void term_init(char vga_adress);
 void term_newline(void);
 void term_putchar(const char c);
 void term_print(const char *str);

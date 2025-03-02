@@ -70,4 +70,4 @@ static const unsigned char keyboard_map[128] = {
     0,0,0,0,0,0,0,0,
     };
 
-void handle_keyboard_interrupt(void);
+void handle_keyboard_interrupt(char vga_address);
